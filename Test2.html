@@ -13,7 +13,7 @@
          <h2 class="text-center">Student Registration Form</h2>
          <div class="row">
               <div class="col-sm-4 offset-sm-3">
-                   <form action="#" method="post" id="Registration-form">
+                   <form action="#" method="post" id="Registration-form" enctype="multipart/form-data">
                           <div class="mt-3">
                              <label for="name">Name</label>
                              <input type="text" id="name" name="name" class="form-control">
@@ -25,10 +25,33 @@
                              <input type="text" id="email" name="email" class="form-control">
                              <span class="text-danger" id="emailerror"></span>
                           </div>
+
+                          <div class="mt-3">
+                             <label for="password">Password</label>
+                             <input type="password" id="password" name="password" class="form-control">
+                             <span class="text-danger" id="password_error"></span>
+                          </div>
+
                           <div class="mt-3">
                              <label for="mobile">Moble</label>
                              <input type="number" id="mobile" name="mobile" class="form-control">
                              <span class="text-danger" id="mobileerror"></span>
+                          </div>
+
+                          <div class="mt-3">
+                             <select name="state" id="state" class="form-control">
+                              <option selected disabled value="">Select State</option>
+                              <option>Haryana</option>
+                              <option>Punjab</option>
+                              <option>Himachal</option>
+                              <option>Delhi</option>
+                             </select>
+                          <span class="text-danger" id="stateerror"></span>
+                          </div>
+
+                          <div class="mt-3">
+                             <input type="file" name="file" id="file" class="form-control">
+                             <span class="text-danger" id="image_error"></span>
                           </div>
 
                         <div class="mt-3">
@@ -50,6 +73,10 @@
                const name=document.getElementById("name").value.trim();
                const email=document.getElementById("email").value.trim();
                const mobile=document.getElementById("mobile").value.trim();
+               const state=document.getElementById("state").value.trim();
+               const photo=document.getElementById("file").files[0];
+               const password=document.getElementById("password").value.trim();
+               const password_pattern=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
                const email_pattern=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                const mobile_patter= /^[6-9]\d{9}$/;
@@ -66,21 +93,48 @@
                }
                else if(!email_pattern.test(email))
                {
+                 document.getElementById("nameerror").innerText="";
                   document.getElementById("emailerror").innerText="Please Enter valid Email-Id";
                  isvalid=false;
                }
+               else if(!password_pattern.test(password)){
+                document.getElementById("emailerror").innerText="";
+                document.getElementById("password_error").innerText="At least 8 char, 1 uppercase,1 lowercase,1 Num & 1 special character"
+               }
                 else if(mobile=="")
                {
-                document.getElementById("nameerror").innerText="";
-                document.getElementById("emailerror").innerText="";
+                 document.getElementById("password_error").innerText="";
                  document.getElementById("mobileerror").innerText="Please Enter Mobile Number";
                  isvalid=false;
                }
                else if(!mobile_patter.test(mobile))
                {
                       document.getElementById("mobileerror").innerText="Invalid Mobile Number";
-                 isvalid=false;
+                      isvalid=false;
                }
+               else if(state=="")
+               {
+                   document.getElementById("mobileerror").innerText="";
+                   document.getElementById("stateerror").innerText="Select Your State";
+                      isvalid=false;
+               }
+               else if(!photo){
+                  document.getElementById("stateerror").innerText="";
+                  document.getElementById("image_error").innerText="upload your Photo";
+                   isvalid=false;
+               }
+               else if(!photo.type.startsWith("image/")){
+                document.getElementById("stateerror").innerText="";
+                document.getElementById("image_error").innerText="Only Image Files are Allowed";
+                   isvalid=false;
+               }
+               else if(photo.size > 2 *1024 *1024)
+               {
+                    document.getElementById("stateerror").innerText="";
+                    document.getElementById("image_error").innerText="Image Size Must be 2 MB";
+                    isvalid=false;
+               }
+               
                return isvalid;
           });
   </script>
